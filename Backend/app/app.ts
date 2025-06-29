@@ -7,6 +7,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 
 dotenv.config();
 const app = express();
+const cors = require("cors");
 const port = 3000;
 
 const swaggerOptions = {
@@ -24,6 +25,7 @@ const swaggerOptions = {
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 app.use(express.json());
+app.use(cors());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/', indexRoutes);
 
