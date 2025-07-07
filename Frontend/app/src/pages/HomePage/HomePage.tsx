@@ -11,7 +11,7 @@ import newsImage2 from '../../assets/images/confirmados.jpg';
 
 const heroData = {
     name: "Evento de lectura",
-    date: "21 de Enero ~ 21 de Febrero",
+    date: "11 de Agosto ~ 15 de Septiembre",
     buttonAttentionCall: "¡Apúntate!",
     url: "/events",
 };
@@ -23,8 +23,8 @@ const recommendedsData = [
 ];
 
 const newsData = [
-    { title: "Nuevos títulos que están arrasando este Febrero 2025", img: newsImage1, to: "/news" },
-    { title: "Títulos confirmados para Marzo 2025", img: newsImage2, to: "/news" },
+    { title: "Nuevos títulos que están arrasando este Julio 2025", img: newsImage1, to: "/news" },
+    { title: "Títulos confirmados para Agosto 2025", img: newsImage2, to: "/news" },
 ];
 
 

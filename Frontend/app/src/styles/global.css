@@ -133,7 +133,25 @@
     color: var(--c-Pink);
     cursor: pointer;
 }
+/* FORMS */
+.form_input {
+    border: 2px solid var(--c-Brown);
+    border-radius: 1.25rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 1.25rem;
+    text-align: center;
+    background-color: transparent;
+    color: var(--c-Orange);
+    width: 100%;
+    max-width: 25rem; 
+    outline: none;
+    font-family: 'Roboto', sans-serif;
+}
 
+.form_input::placeholder {
+    color: var(--c-Pink);
+    opacity: 0.8;
+}
 /* MAX-WIDTH */
 .max-width {
     max-width: 81.25rem;

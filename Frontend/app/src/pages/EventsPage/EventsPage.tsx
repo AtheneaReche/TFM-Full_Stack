@@ -6,7 +6,7 @@ import heroImage from '../../assets/images/hero_event_image.png';
 // Content
 const heroData = {
     name: "Evento de lectura",
-    date: "21 de Enero ~ 21 de Febrero",
+    date: "11 de Agosto ~ 15 de Septiembre",
     buttonText: "¡Apúntate!",
 };
 
