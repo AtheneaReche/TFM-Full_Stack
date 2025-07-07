@@ -1,0 +1,73 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modalContent {
+    background: rgb(238, 238, 238);
+    padding: 20px 30px;
+    border-radius: 10px;
+    width: 60%;
+    max-height: 90vh;
+    overflow-y: auto;
+    font-size: 18px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    color: var(--c-Brown);
+}
+
+.modalTitle {
+    font-family: "Roboto", serif;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modalQuestions {
+    margin: 15px 0 10px 0;
+    font-weight: bold;
+}
+
+.questionsList {
+    padding-left: 20px;
+}
+
+.questionsList li {
+    list-style-type: disc;
+    padding-top: 5px;
+}
+
+.modalButtonContainer {
+    text-align: center;
+    padding-top: 30px;
+}
+
+.modalButton {
+    padding: 15px 80px;
+    font-size: inherit;
+    border-radius: 5px;
+    border: 2px solid var(--c-Brown);
+    background-color: transparent;
+    color: var(--c-Brown);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modalButton:hover {
+    background-color: var(--c-Brown);
+    color: var(--c-Beige);
+}
+
+@media (max-width: 768px) {
+    .modalContent {
+        width: 85%;
+    }
+}

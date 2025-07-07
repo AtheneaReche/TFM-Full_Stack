@@ -1,0 +1,66 @@
+.searchSection {
+    padding: 1.875rem 0 3.13rem 0;
+    text-align: center;
+}
+
+.title {
+    padding-bottom: 2.5rem;
+    font-size: 2.5rem;
+}
+
+.searchContainer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.inputsContainer {
+    display: flex;
+    border: 2px solid var(--c-Brown);
+    border-radius: 1.25rem;
+}
+
+.input {
+    border: none;
+    outline: none;
+    padding: 0.625rem 1.25rem;
+    font-size: 1.25rem;
+    text-align: center;
+    background-color: transparent;
+    color: var(--c-Orange);
+    width: 15rem;
+}
+
+.input::placeholder {
+    color: var(--c-Yellow);
+}
+
+.input:first-child {
+    border-right: 2px solid var(--c-Brown);
+}
+
+.tipsSection {
+    text-align: center;
+    padding: 1.25rem 0 3.125rem 0;
+}
+
+.tipTitle {
+    font-size: 2.25rem;
+    margin-bottom: 1.875rem;
+}
+
+.resultsSection {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding-bottom: 2.5rem;
+}
+
+.message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--c-Brown);
+    padding: 2rem;
+}

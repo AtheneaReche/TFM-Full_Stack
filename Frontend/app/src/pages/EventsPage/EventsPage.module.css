@@ -1,0 +1,41 @@
+.heroContent {
+    display: flex;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.heroImage img {
+    width: 32.5rem;
+}
+
+.whatIsSection {
+    padding: 2rem 0;
+}
+
+.faqSection {
+    padding: 2rem 0;
+}
+
+.faqHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.faqMoreLink {
+    font-size: 1.3rem;
+    text-decoration: none;
+}
+
+.faqMoreLink:hover {
+    text-decoration: underline;
+    color: var(--c-Pink);
+}
+
+@media (max-width: 992px) {
+    .heroContent {
+        flex-direction: column;
+        text-align: center;
+    }
+}

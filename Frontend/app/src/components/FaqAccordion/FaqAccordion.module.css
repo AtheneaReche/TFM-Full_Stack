@@ -1,0 +1,35 @@
+.accordion {
+    --bs-accordion-bg: var(--c-Beige) !important;
+    --bs-accordion-border-radius: 1.5625rem !important;
+    --bs-accordion-inner-border-radius: 1.5625rem !important;
+    --bs-accordion-btn-padding-y: 1.75rem !important;
+    --bs-accordion-btn-focus-box-shadow: none !important;
+    --bs-accordion-active-color: var(--c-Beige) !important;
+    --bs-accordion-active-bg: var(--c-Pink) !important;
+    --bs-accordion-btn-color: var(--c-Brown) !important;
+}
+
+.accordionItem {
+    border: 3px solid var(--c-Brown) !important;
+    margin-bottom: 1.5625rem;
+    border-radius: 1.5625rem !important;
+}
+
+.accordionItem:hover {
+    border: 3px solid var(--c-Pink) !important;
+}
+
+.accordionButton {
+    font-family: "Roboto", serif;
+    font-size: 1.25rem !important; 
+    font-weight: 700;
+}
+
+.accordionButton:not(.collapsed) {
+    box-shadow: none !important;
+}
+
+.accordionBody {
+    color: var(--c-Orange);
+    font-weight: bold;
+}

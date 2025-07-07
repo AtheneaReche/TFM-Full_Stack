@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import styles from './SignUpPage.module.css';
 
-const RegisterPage = () => {
+
+const SignUpPage = () => {
   
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -33,44 +35,42 @@ const RegisterPage = () => {
   };
 
   return (
-    <div>
-      <h2>Create an account</h2>
-      <form onSubmit={handleSubmit}>
-      <div>
-          <label htmlFor="email">Username</label>
-          <input
-            type="name"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+    <div className={styles.pageContainer}>
+      <h1 className={`title c_Yellow ${styles.pageTitle}`}>Crear Cuenta</h1>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <input
+          type="text"
+          placeholder="Nombre"
+          className="form_input" 
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          className="form_input"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          className="form_input"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Sign up</button>
+        
+        <button type="submit" className="general_button">
+          Sign Up
+        </button>
       </form>
     </div>
   );
 };
 
-export default RegisterPage;
+export default SignUpPage;

@@ -1,0 +1,142 @@
+/* GENERIC */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* VAR COLORS */
+:root {
+    --c-Beige: #F5ECD7;
+    --c-Brown: #59380D;
+    --c-Pink: #E1A8A8;
+    --c-Orange: #FF8A58;
+    --c-Yellow: #F2C379;
+}
+
+/* FONTS */
+.title {
+    font-family: "KyivType Sans", sans-serif;
+    font-size: 8rem;
+    font-weight: 700;
+    font-style: normal;
+    -webkit-text-stroke-color: var(--c-Brown);
+    -webkit-text-stroke-width: 3px;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 6rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .title {
+        font-size: 3.5rem;
+    }
+}
+
+.subtitle {
+    font-family: "Roboto", serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-style: normal;
+}
+
+@media (max-width: 576px) {
+    .subtitle {
+        font-size: 1.5rem;
+    }
+}
+
+.text {
+    font-family: "Roboto", serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* COLORS */
+.bg_c_Beige {
+    background-color: var(--c-Beige);
+}
+.c_Beige {
+    color: var(--c-Beige);
+}
+.c_Brown {
+    color: var(--c-Brown);
+}
+.c_Pink {
+    color: var(--c-Pink);
+}
+.c_Orange {
+    color: var(--c-Orange);
+}
+.c_Yellow {
+    color: var(--c-Yellow);
+}
+
+/* BUTTONS */
+.general_button {
+    width: 12.6rem;
+    height: 4rem;
+    border-radius: 1.875rem;
+    border: 3px solid var(--c-Brown);
+    background-color: transparent;
+    font-size: 1.5rem;
+    color: var(--c-Brown);
+    font-weight: 700;
+}
+.general_button:hover {
+    background-color: var(--c-Pink);
+    border: .1875rem solid var(--c-Pink);
+    color: var(--c-Beige);
+    cursor: pointer;
+}
+
+.secondary_button {
+    padding: 0.75rem 3.75rem;
+    background-color: transparent;
+    border-radius: 1.875rem;
+    border: 3px solid var(--c-Orange);
+    color: var(--c-Orange);
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+.secondary_button:hover {
+    background-color: var(--c-Orange);
+    color: var(--c-Beige);
+    cursor: pointer;
+}
+
+.search_button {
+    padding: 0.625rem 2.5rem;
+    border-radius: 1.56rem;
+    border: none;
+    background-color: var(--c-Pink);
+    color: var(--c-Beige);
+    font-size: 1.5rem;
+    font-weight: 700;
+    transition: .8s background-color, .6s color;
+}
+
+@media (max-width: 480px) {
+    .search_button {
+        padding: 0.625rem 1.875rem;
+        font-size: 1.2rem;
+    }
+}
+
+.search_button:hover {
+    background-color: transparent;
+    border: 3px solid var(--c-Pink);
+    color: var(--c-Pink);
+    cursor: pointer;
+}
+
+/* MAX-WIDTH */
+.max-width {
+    max-width: 81.25rem;
+    margin: 0 auto;
+    padding: 0rem 1.875rem;
+}

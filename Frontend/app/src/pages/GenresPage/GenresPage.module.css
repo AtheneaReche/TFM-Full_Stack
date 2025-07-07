@@ -1,0 +1,68 @@
+.pageTitle {
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.genresContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.genreCircle {
+    border: 3px solid var(--c-Brown);
+    border-radius: 50%;
+    width: 7.5rem;
+    height: 7.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--c-Brown);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 1rem;
+}
+
+.genreCircle:hover {
+    border-color: var(--c-Yellow);
+    background-color: var(--c-Yellow);
+    color: var(--c-Pink);
+    transform: scale(1.05);
+}
+
+.genreIcon {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.genreName {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.genreNameLong {
+    font-size: 0.75rem;
+}
+
+.resultsContainer {
+    min-height: 20vh; /* Para dar espacio al loader o mensajes */
+}
+
+.booksGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1.25rem;
+}
+
+.message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--c-Brown);
+    padding: 2rem;
+}

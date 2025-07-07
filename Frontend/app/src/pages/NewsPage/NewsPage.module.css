@@ -1,0 +1,11 @@
+.pageTitle {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.booksGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1.25rem;
+}
