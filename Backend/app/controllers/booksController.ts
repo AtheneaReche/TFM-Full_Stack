@@ -8,6 +8,7 @@ export const getBooks = async (req: Request, res: Response): Promise<void> => {
         let sql = `
                 SELECT 
                 books.id,
+                books.name,
                 books.book_cover,
                 authors.name AS author,
                 books.genre,
@@ -43,18 +44,22 @@ export const getBooks = async (req: Request, res: Response): Promise<void> => {
         res.status(200).json(rows);
     } catch (err){
         console.error(err);
-        res.status(500).send('Error fetching books ' + err)
+        res.status(500).json({ message: 'Error fetching books' });
     }
 };
 //Get Method by Id
 export const getBooksById = async (req: Request, res: Response): Promise<void> => {
     try{
         const { id } = req.params;
-        const book = await db.execute('SELECT * FROM books WHERE id = ?', [id]);
-        res.status(200).json(book);
+        const [rows]: any = await db.execute('SELECT * FROM books WHERE id = ?', [id]);
+        if (rows.length === 0) {
+            res.status(404).json({ message: 'Book not found' });
+            return;
+        }
+        res.status(200).json(rows[0]);
     } catch (err){
         console.error(err);
-        res.status(500).send('Error fetching Books ' + err)
+        res.status(500).json({ message: 'Error fetching Book' });
     }
 };
 
@@ -62,7 +67,7 @@ export const getBooksById = async (req: Request, res: Response): Promise<void> =
 export const createBooks = async (req: Request, res: Response): Promise<void> => {
     const { name, book_cover, author, genre, publishing_year, publisher, ISBN, description } = req.body;
     try{
-        const [result] = await db.execute(`
+        const [result]: any = await db.execute(`
                 INSERT INTO books (
                 name, 
                 book_cover, 
@@ -82,23 +87,27 @@ export const createBooks = async (req: Request, res: Response): Promise<void> =>
                     ISBN || null, 
                     description || null]
         );
-        console.log('Added book', result);
+        res.status(201).json({ message: 'Book created', bookId: result.insertId });
     } catch (err) {
         console.error('Error executing query: ' + err);
+        res.status(500).json({ message: 'Error creating book' });
     }
-    res.status(200).send();
 };
 
 //Delete Method by id
 export const deleteBooks = async (req: Request, res: Response): Promise<void> =>{
     const { id } = req.params;
     try{
-        const [result] = await db.execute('DELETE FROM books WHERE id = ?', [id]);
-        console.log('Deleted book', result);
+        const [result]: any = await db.execute('DELETE FROM books WHERE id = ?', [id]);
+        if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Book not found' });
+            return;
+        }
+        res.status(200).json({ message: 'Book deleted' });
     } catch (err) {
         console.error('Error executing query: ' + err);
+        res.status(500).json({ message: 'Error deleting book' });
     }
-    res.status(200).send();
 };
 
 //Put Method by id
@@ -106,7 +115,7 @@ export const updateBooks = async (req: Request, res: Response): Promise<void> =>
     const { id } = req.params;
     const { name, book_cover, author, genre, publishing_year, publisher, ISBN, description } = req.body;
     try{
-        const [result] = await db.execute(`
+        const [result]: any = await db.execute(`
                 UPDATE books SET 
                 name = ?, 
                 book_cover = ?, 
@@ -117,19 +126,24 @@ export const updateBooks = async (req: Request, res: Response): Promise<void> =>
                 ISBN = ?, 
                 description = ? 
                 WHERE id = ?`, [
-                    name, 
-                    book_cover, 
-                    author, 
-                    genre, 
-                    publishing_year, 
-                    publisher, 
-                    ISBN, 
-                    description, 
-                    id]
+                    name,
+                    book_cover,
+                    author,
+                    genre,
+                    publishing_year,
+                    publisher,
+                    ISBN,
+                    description,
+                    id
+                ]
         );
-        console.log('Updated book', result);
+        if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Book not found' });
+            return;
+        }
+        res.status(200).json({ message: 'Book updated' });
     } catch (err) {
         console.error('Error executing query: ' + err);
+        res.status(500).json({ message: 'Error updating book' });
     }
-    res.status(200).send();
 };

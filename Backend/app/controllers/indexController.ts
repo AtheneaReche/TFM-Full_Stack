@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
 
 export const index = (req: Request, res: Response): void => {
-  res.send(200);
+  res.sendStatus(200);
 };

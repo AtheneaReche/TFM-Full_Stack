@@ -29,7 +29,10 @@ app.use(cors());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/', indexRoutes);
 
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Server running in http://localhost:${port}`);
+  });
+}
 
-app.listen(port, () => {
-  console.log(`Server running in http://localhost:${port}`);
-});
+export default app;

@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import db from '../../database/db';
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response): Promise<void> => {
   const { name, password, email, role } = req.body;
 
   const connection = await db.getConnection();
@@ -12,14 +12,14 @@ export const register = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const [result] = await connection.execute(
+    const [result]: any = await connection.execute(
       'INSERT INTO users (name, password, email, role) VALUES (?, ?, ?, ?)',
       [name, hashedPassword, email, role || 'user']
     );
 
     const userId = result.insertId;
 
-    const [collectionResult] = await connection.execute(
+    await connection.execute(
       'INSERT INTO books_collections (user, name) VALUES (?, ?)',
       [userId, 'Favourites']
     );
@@ -36,20 +36,26 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const login = async (req: Request, res: Response) => {
-  const { name, password } = req.body;
+export const login = async (req: Request, res: Response): Promise<void> => {
+  const { email, password } = req.body;
 
   try {
     const [rows]: any = await db.execute(
-      'SELECT * FROM users WHERE name = ?',
-      [name]
+      'SELECT * FROM users WHERE email = ?',
+      [email]
     );
 
     const user = rows[0];
-    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+    if (!user) {
+      res.status(400).json({ message: 'Invalid credentials' });
+      return;
+    }
 
     const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) return res.status(400).json({ message: 'Invalid credentials' });
+    if (!isValid) {
+      res.status(400).json({ message: 'Invalid credentials' });
+      return;
+    }
 
     const token = jwt.sign(
       { id: user.id, role: user.role },

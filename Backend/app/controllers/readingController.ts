@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middlewares/authMiddleware';
 import db from '../../database/db';
 
-export const startReading = async (req: AuthRequest, res: Response) => {
+export const startReading = async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user.id;
   const { bookId } = req.body;
 
@@ -10,8 +10,7 @@ export const startReading = async (req: AuthRequest, res: Response) => {
     await db.execute(
       `INSERT INTO \`users-books\` (user, book, reading_status, reading_progress)
        VALUES (?, ?, 'reading', 0)
-       ON DUPLICATE KEY UPDATE reading_status = 'reading'`
-    , [userId, bookId]);
+       ON DUPLICATE KEY UPDATE reading_status = 'reading'`, [userId, bookId]);
 
     res.status(200).json({ message: 'Started reading' });
   } catch (err) {
@@ -20,7 +19,7 @@ export const startReading = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const updateProgress = async (req: AuthRequest, res: Response) => {
+export const updateProgress = async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user.id;
   const { bookId, progress, status } = req.body;
 
@@ -39,7 +38,7 @@ export const updateProgress = async (req: AuthRequest, res: Response) => {
   }
 };
 
-export const getUserBooks = async (req: AuthRequest, res: Response) => {
+export const getUserBooks = async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user.id;
 
   try {

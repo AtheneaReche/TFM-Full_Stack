@@ -4,7 +4,7 @@ exports.authorizeRole = exports.authenticateToken = void 0;
 var jsonwebtoken_1 = require("jsonwebtoken");
 var authenticateToken = function (req, res, next) {
     var authHeader = req.headers['authorization'];
-    var token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+    var token = authHeader && authHeader.split(' ')[1]; 
     if (!token) {
         return res.status(401).json({ message: 'Access denied. No token provided.' });
     }

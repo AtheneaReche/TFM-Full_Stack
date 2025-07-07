@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middlewares/authMiddleware';
 import db from '../../database/db';
 
-export const getFavorites = async (req: AuthRequest, res: Response) => {
+export const getFavorites = async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user.id;
 
   try {

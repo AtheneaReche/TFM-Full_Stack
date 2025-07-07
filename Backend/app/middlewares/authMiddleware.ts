@@ -5,12 +5,13 @@ export interface AuthRequest extends Request {
   user?: any;
 }
 
-export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction): void => {
   const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+  const token = authHeader && authHeader.split(' ')[1]; 
 
   if (!token) {
-    return res.status(401).json({ message: 'Access denied. No token provided.' });
+    res.status(401).json({ message: 'Access denied. No token provided.' });
+    return;
   }
 
   try {
@@ -24,11 +25,11 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: NextFun
 };
 
 export const authorizeRole = (role: string) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
+  return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (req.user?.role !== role) {
-      return res.status(403).json({ message: 'Insufficient permissions' });
+      res.status(403).json({ message: 'Insufficient permissions' });
+      return;
     }
     next();
   };
 };
-  

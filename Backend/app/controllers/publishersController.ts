@@ -8,28 +8,30 @@ export const getPublishers = async (req: Request, res: Response): Promise<void> 
         res.json(rows);
     } catch (err){
         console.error(err);
-        res.status(500).send('Error fetching publishers ' + err)
+        res.status(500).json({ message: 'Error fetching publishers' });
     }
-    res.status(200).send();
 };
 //Get Method by Id
 export const getPublishersById = async (req: Request, res: Response): Promise<void> => {
     try{
         const { id } = req.params;
-        const publisher = await db.execute('SELECT * FROM publishers WHERE id = ?', [id]);
-        res.json(publisher);
+        const [rows]: any = await db.execute('SELECT * FROM publishers WHERE id = ?', [id]);
+        if (rows.length === 0) {
+            res.status(404).json({ message: 'Publisher not found' });
+            return;
+        }
+        res.json(rows[0]);
     } catch (err){
         console.error(err);
-        res.status(500).send('Error fetching publishers ' + err)
+        res.status(500).json({ message: 'Error fetching publisher' });
     }
-    res.status(200).send();
 };
 
 //Create Method
 export const createPublishers = async (req: Request, res: Response): Promise<void> => {
     const { name, country } = req.body;
     try{
-        const [result] = await db.execute(`
+        const [result]: any = await db.execute(`
             INSERT INTO publishers (
                 name, 
                 country) 
@@ -38,23 +40,27 @@ export const createPublishers = async (req: Request, res: Response): Promise<voi
                 country
             ]
         );
-        console.log('Added publisher', result);
+        res.status(201).json({ message: 'Publisher created', publisherId: result.insertId });
     } catch (err) {
         console.error('Error executing query: ' + err);
+        res.status(500).json({ message: 'Error creating publisher' });
     }
-    res.status(200).send();
 };
 
 //Delete Method by id
 export const deletePublishers = async (req: Request, res: Response): Promise<void> =>{
     const { id } = req.params;
     try{
-        const [result] = await db.execute(`DELETE FROM publishers WHERE id = ?`, [id]);
-        console.log('Deleted publisher', result);
+        const [result]: any = await db.execute(`DELETE FROM publishers WHERE id = ?`, [id]);
+        if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Publisher not found' });
+            return;
+        }
+        res.status(200).json({ message: 'Publisher deleted' });
     } catch (err) {
         console.error('Error executing query: ' + err);
+        res.status(500).json({ message: 'Error deleting publisher' });
     }
-    res.status(200).send();
 };
 
 //Put Method by id
@@ -62,7 +68,7 @@ export const updatePublishers = async (req: Request, res: Response): Promise<voi
     const { id } = req.params;
     const { name, country } = req.body;
     try{
-        const [result] = await db.execute(`
+        const [result]: any = await db.execute(`
             UPDATE publishers SET 
                 name = ?, 
                 country = ? 
@@ -72,9 +78,13 @@ export const updatePublishers = async (req: Request, res: Response): Promise<voi
                 id
             ]
         );
-        console.log('Updated publisher', result);
+        if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Publisher not found' });
+            return;
+        }
+        res.status(200).json({ message: 'Publisher updated' });
     } catch (err) {
         console.error('Error executing query: ' + err);
+        res.status(500).json({ message: 'Error updating publisher' });
     }
-    res.status(200).send();
 };

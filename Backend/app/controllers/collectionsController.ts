@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { AuthRequest } from '../middlewares/authMiddleware';
 import db from '../../database/db'
 
-export const createCollection = async (req: AuthRequest, res: Response) => {
+export const createCollection = async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user.id;
   const { name } = req.body;
 
@@ -13,7 +13,8 @@ export const createCollection = async (req: AuthRequest, res: Response) => {
     );
 
     if (existing.length > 0) {
-      return res.status(400).json({ message: 'Collection already exists' });
+      res.status(400).json({ message: 'Collection already exists' });
+      return;
     }
 
     await db.execute(
@@ -28,7 +29,7 @@ export const createCollection = async (req: AuthRequest, res: Response) => {
   }
 };
   
-export const getCollections = async (req: AuthRequest, res: Response) => {
+export const getCollections = async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user.id;
 
   try {
@@ -38,11 +39,12 @@ export const getCollections = async (req: AuthRequest, res: Response) => {
     );
     res.json(rows);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Error fetching collections' });
   }
 };
   
-export const deleteCollection = async (req: AuthRequest, res: Response) => {
+export const deleteCollection = async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user.id;
   const { id } = req.params;
 
@@ -53,11 +55,12 @@ export const deleteCollection = async (req: AuthRequest, res: Response) => {
     );
 
     if (collections.length === 0) {
-      return res.status(404).json({ message: 'Collection not found or not yours' });
+      res.status(404).json({ message: 'Collection not found or not yours' });
+      return;
     }
 
     await db.execute(
-      'DELETE FROM books_collections_books WHERE collection_id = ?',
+      'DELETE FROM `books_collections-book` WHERE collection = ?',
       [id]
     );
 
@@ -68,11 +71,12 @@ export const deleteCollection = async (req: AuthRequest, res: Response) => {
 
     res.json({ message: 'Collection deleted' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Error deleting collection' });
   }
 };
 
-export const addBookToCollection = async (req: AuthRequest, res: Response) => {
+export const addBookToCollection = async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user.id;
   const { collectionId, bookId } = req.body;
 
@@ -83,21 +87,23 @@ export const addBookToCollection = async (req: AuthRequest, res: Response) => {
     );
 
     if (collections.length === 0) {
-      return res.status(403).json({ message: 'No access to this collection' });
+      res.status(403).json({ message: 'No access to this collection' });
+      return;
     }
 
     await db.execute(
-      'INSERT INTO books_collections_books (collection, book) VALUES (?, ?)',
+      'INSERT INTO `books_collections-book` (collection, book) VALUES (?, ?)',
       [collectionId, bookId]
     );
 
     res.status(201).json({ message: 'Book added to collection' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Error adding book to collection' });
   }
 };
 
-export const removeBookFromCollection = async (req: AuthRequest, res: Response) => {
+export const removeBookFromCollection = async (req: AuthRequest, res: Response): Promise<void> => {
   const userId = req.user.id;
   const { collectionId, bookId } = req.body;
 
@@ -108,16 +114,18 @@ export const removeBookFromCollection = async (req: AuthRequest, res: Response) 
     );
 
     if (collections.length === 0) {
-      return res.status(403).json({ message: 'No access to this collection' });
+      res.status(403).json({ message: 'No access to this collection' });
+      return;
     }
 
     await db.execute(
-      'DELETE FROM \`books_collections-books\` WHERE collection = ? AND book = ?',
+      'DELETE FROM `books_collections-book` WHERE collection = ? AND book = ?',
       [collectionId, bookId]
     );
 
     res.json({ message: 'Book removed from collection' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Error removing book' });
   }
 };
