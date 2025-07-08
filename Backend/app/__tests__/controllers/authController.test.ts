@@ -32,14 +32,14 @@ describe('Auth Controller', () => {
 
   describe('login', () => {
     it('should login a user and return a token', async () => {
-      const mockUser = { id: 1, name: 'testuser', password: 'hashedpassword', role: 'user' };
+      const mockUser = { id: 1, name: 'testuser', email: 'test@email.com', password: 'hashedpassword', role: 'user' };
       mockedDb.execute.mockResolvedValue([[mockUser]] as any);
       
       (bcrypt.compare as jest.Mock).mockImplementation(() => Promise.resolve(true));
       (jwt.sign as jest.Mock).mockReturnValue('mocked-token');
       
       const req = mockRequest();
-      req.body = { name: 'testuser', password: 'password' };
+      req.body = { email: 'test@email.com', password: 'password' };
       const res = mockResponse();
       
       process.env.JWT_SECRET = 'test-secret';
@@ -47,8 +47,8 @@ describe('Auth Controller', () => {
       await login(req, res);
       
       expect(mockedDb.execute).toHaveBeenCalledWith(
-        'SELECT * FROM users WHERE name = ?',
-        ['testuser']
+        'SELECT * FROM users WHERE email = ?',
+        ['test@email.com']
       );
       expect(bcrypt.compare).toHaveBeenCalledWith('password', 'hashedpassword');
       expect(jwt.sign).toHaveBeenCalledWith(
