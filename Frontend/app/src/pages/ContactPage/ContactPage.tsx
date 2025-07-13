@@ -1,6 +1,7 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 import styles from './ContactPage.module.css';
+import toast from 'react-hot-toast';
 
 const ContactPage = () => {
     const [name, setName] = useState('');
@@ -13,7 +14,7 @@ const ContactPage = () => {
 
         const formData = { name, email, message };
         console.log("Datos del formulario enviados:", formData);
-        alert("¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.");
+        toast.success("¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.");
 
         setName('');
         setEmail('');

@@ -18,6 +18,8 @@ export interface NavLinkInfo {
     first_publish_year?: number;
   }
 
+  export type BookStatus = 'wantToRead' | 'reading' | 'read';
+
   export interface SubjectApiAuthor {
     key: string;
     name: string;

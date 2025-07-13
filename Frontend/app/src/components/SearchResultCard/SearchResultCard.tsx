@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import type { Book } from '../../types';
+import type { Book, BookStatus } from '../../types';
 import styles from './SearchResultCard.module.css';
 import noCoverImage from '../../assets/images/no-cover.png';
+import toast from 'react-hot-toast';
+import { Dropdown } from 'react-bootstrap'; 
 
-interface SearchResultCardProps {
-    book: Book;
-}
-
-const SearchResultCard = ({ book }: SearchResultCardProps) => {
+const SearchResultCard = ({ book }: { book: Book }) => {
     const navigate = useNavigate();
+    const isLoggedIn = !!localStorage.getItem('token');
     const [isFavorite, setIsFavorite] = useState(false);
 
     useEffect(() => {
@@ -23,7 +22,7 @@ const SearchResultCard = ({ book }: SearchResultCardProps) => {
         e.preventDefault();
 
         if (!localStorage.getItem('token')) {
-            alert('Debes iniciar sesión para añadir libros a favoritos.');
+            toast.error('Debes iniciar sesión para añadir favoritos.');
             navigate('/login');
             return;
         }
@@ -34,11 +33,11 @@ const SearchResultCard = ({ book }: SearchResultCardProps) => {
         if (bookIndex > -1) {
             favorites.splice(bookIndex, 1);
             setIsFavorite(false);
-            alert(`"${book.title}" ha sido eliminado de tus favoritos.`);
+            toast.success(`"${book.title}" ha sido eliminado de tus favoritos.`);
         } else {
             favorites.push(book.key);
             setIsFavorite(true);
-            alert(`"${book.title}" ha sido añadido a tus favoritos.`);
+            toast.success(`"${book.title}" ha sido añadido a tus favoritos.`); 
         }
         
         localStorage.setItem('favorites', JSON.stringify(favorites));

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styles from './SignUpPage.module.css';
 
 
@@ -66,9 +66,18 @@ const SignUpPage = () => {
         {error && <p style={{ color: 'red' }}>{error}</p>}
         
         <button type="submit" className="general_button">
-          Sign Up
+          Crear cuenta
         </button>
       </form>
+
+      <div className={styles.extraLinksContainer}>
+        <p className={`${styles.extraLink} c_Brown`}>
+          ¿Ya tienes cuenta?{' '}
+          <Link to="/login" className={styles.extraLink}>
+            Inicia sesión aquí
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

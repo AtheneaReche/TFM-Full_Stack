@@ -4,7 +4,7 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    height: 24rem;
+    height: 28rem;
     background-color: transparent;
     text-decoration: none;
     color: var(--c-Brown);
@@ -83,4 +83,16 @@
 
 .favoriteButton.favorited {
     color: var(--c-Pink);
+}
+
+.dropdownToggle {
+    width: 100%;
+    margin-top: 0.5rem;
+    background-color: var(--c-Orange) !important;
+    border: none !important;
+    font-size: 0.8rem !important;
+    font-weight: bold !important;
+}
+.dropdownToggle:hover, .dropdownToggle:focus {
+    background-color: var(--c-Brown) !important;
 }

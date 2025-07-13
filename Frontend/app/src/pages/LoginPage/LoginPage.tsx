@@ -39,7 +39,7 @@ const LoginPage = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <h1 className={`title c_Yellow ${styles.pageTitle}`}>Login</h1>
+      <h1 className={`title c_Yellow ${styles.pageTitle}`}>Iniciar Sesión</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="email"
@@ -59,7 +59,7 @@ const LoginPage = () => {
         />
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit" className="general_button">
-          Login
+          Entrar
         </button>
       </form>
       <div className={styles.extraLinksContainer}>
