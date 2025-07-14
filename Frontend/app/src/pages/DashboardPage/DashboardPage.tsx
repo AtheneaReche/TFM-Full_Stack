@@ -37,21 +37,33 @@ const DashboardPage = () => {
             }
 
             try {
-                const bookPromises = allKeys.map(key => 
-                    fetch(`https://openlibrary.org${key}.json`).then(res => res.json())
+                const bookPromises = allKeys.map(key =>
+                  fetch(`http://localhost:3000/books/${key}`)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error(`Error al obtener el libro con id: ${key}`);
+                        }
+                        return res.json();
+                  })
                 );
-                const results = await Promise.all(bookPromises);
-                const allBooks = results.map(data => ({
-                    key: data.key,
-                    title: data.title,
-                    cover_i: data.covers?.[0],
-                }));
+                const responses = await Promise.all(bookPromises);
 
-                setFavoriteBooks(allBooks.filter(book => favoriteKeys.includes(book.key)));
-                setReadBooks(allBooks.filter(book => readKeys.includes(book.key)));
-                setWantToReadBooks(allBooks.filter(book => wantToReadKeys.includes(book.key)));
-                setReadingBooks(allBooks.filter(book => readingKeys.includes(book.key)));
-                
+                const allBooks:Book[] = responses.map(bookData => {
+                    return {
+                        key: bookData.id.toString(),
+                        title: bookData.name,
+                        author_name: [bookData.author],
+                        cover_i:  bookData.book_cover,
+                        first_publish_year: bookData.publishing_year
+                    };
+                });
+
+                const bookMap = new Map(allBooks.map(book => [book.key, book]));
+
+                setFavoriteBooks(favoriteKeys.map((key: string) => bookMap.get(key)).filter(Boolean) as Book[]);
+                setReadBooks((userBookLists.read || []).map((key: string) => bookMap.get(key)).filter(Boolean) as Book[]);
+                setReadingBooks((userBookLists.reading || []).map((key: string) => bookMap.get(key)).filter(Boolean) as Book[]);
+                setWantToReadBooks((userBookLists.wantToRead || []).map((key: string) => bookMap.get(key)).filter(Boolean) as Book[]);
             } catch (error) {
                 console.error("Error fetching book lists:", error);
             } finally {

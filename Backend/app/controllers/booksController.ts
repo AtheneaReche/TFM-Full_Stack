@@ -51,7 +51,23 @@ export const getBooks = async (req: Request, res: Response): Promise<void> => {
 export const getBooksById = async (req: Request, res: Response): Promise<void> => {
     try{
         const { id } = req.params;
-        const [rows]: any = await db.execute('SELECT * FROM books WHERE id = ?', [id]);
+        const sql = `
+            SELECT 
+                books.id,
+                books.name,
+                books.book_cover,
+                authors.name AS author,
+                books.genre,
+                books.publishing_year,
+                publishers.name AS publisher,
+                books.ISBN,
+                books.description
+            FROM books
+            JOIN authors ON books.author = authors.id
+            LEFT JOIN publishers ON books.publisher = publishers.id
+            WHERE books.id = ?
+        `;
+        const [rows]: any = await db.execute(sql, [id]);
         if (rows.length === 0) {
             res.status(404).json({ message: 'Book not found' });
             return;
