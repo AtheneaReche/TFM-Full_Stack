@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Book, SubjectApiWork, SubjectApiAuthor } from '../../types';
+import type { Book, DbBook } from '../../types';
 import styles from './GenresPage.module.css';
 import BookCard from '../../components/BookCard/BookCard';
 import Loader from '../../components/Loader/Loader';
@@ -46,22 +46,23 @@ const GenresPage = () => {
         setSelectedGenre(genreName);
 
         try {
-            const response = await fetch(`https://openlibrary.org/subjects/${genreKey}.json?limit=12`);
-            const data = await response.json();
-            if (data.works && data.works.length > 0) {
-                const formattedBooks = data.works.map((work: SubjectApiWork) => ({
-                    key: work.key,
-                    title: work.title,
-                    author_name: work.authors?.map((author: SubjectApiAuthor) => author.name),
-                    cover_i: work.cover_id,
-                }));
-                setBooks(formattedBooks);
-            } else {
-                setBooks([]);
-            }
+            const response = await fetch(`http://localhost:3000/books?genre=${genreKey}&limit=12`);
+            if (!response.ok) throw new Error('No se encontraron libros para este género.');
+
+            const booksData: DbBook[] = await response.json();
+
+            const formattedBooks: Book[] = booksData.map(bookData => ({
+                key: bookData.id.toString(),
+                title: bookData.name,
+                author_name: [bookData.author],
+                cover_i: bookData.book_cover,
+                first_publish_year: bookData.publishing_year
+            }));
+            setBooks(formattedBooks);
         } catch (err) {
             setError("No se pudieron cargar los libros. Por favor, inténtalo de nuevo más tarde.");
             console.error(err);
+            setBooks([]);
         } finally {
             setIsLoading(false);
         }

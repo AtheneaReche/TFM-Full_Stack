@@ -1,13 +1,7 @@
 import { useState, useEffect } from 'react';
-import type { Book } from '../../types';
+import type { Book, DbBook } from '../../types';
 import styles from './BestSellersPage.module.css';
 import BookList from '../../components/BookList/BookList';
-
-const bestSellerTitles = [
-    "Cien años de soledad", "Don Quijote de la Mancha", "Orgullo y prejuicio",
-    "1984", "Matar a un ruiseñor", "El gran Gatsby", "Los juegos del hambre",
-    "El código Da Vinci", "Crimen y castigo", "La Odisea"
-];
 
 const BestSellersPage = () => {
     const [books, setBooks] = useState<Book[]>([]);
@@ -16,14 +10,19 @@ const BestSellersPage = () => {
     useEffect(() => {
         const fetchAllBooks = async () => {
             try {
-                const bookPromises = bestSellerTitles.map(async (title) => {
-                    const response = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(title)}&limit=1`);
-                    const data = await response.json();
-                    return data.docs[0];
-                });
+                const response = await fetch(`http://localhost:3000/books/bestsellers`);
+                if (!response.ok) throw new Error('No se pudieron obtener los best sellers.');
+            
+                const booksData: DbBook[] = await response.json();
 
-                const fetchedBooks = await Promise.all(bookPromises);
-                setBooks(fetchedBooks.filter(book => book));
+                const formattedBooks: Book[] = booksData.map(bookData => ({
+                    key: bookData.id.toString(),
+                    title: bookData.name,
+                    author_name: [bookData.author],
+                    cover_i:  bookData.book_cover,
+                    first_publish_year: bookData.publishing_year
+                }));
+                setBooks(formattedBooks);
             } catch (error) {
                 console.error("Error fetching best sellers:", error);
             } finally {

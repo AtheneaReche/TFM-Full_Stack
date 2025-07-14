@@ -1,14 +1,8 @@
 import { useState, useEffect } from 'react';
-import type { Book, SubjectApiWork } from '../../types';
+import type { Book, DbBook } from '../../types';
 import styles from './NewsPage.module.css';
 import BookCard from '../../components/BookCard/BookCard';
 import Loader from '../../components/Loader/Loader';
-
-const genres = [
-    "fiction", "non-fiction", "fantasy", "science-fiction", "mystery", 
-    "romance", "horror", "biography", "history", "poetry", "adventure", 
-    "children", "young-adult", "crime", "thriller", "classics", "humor"
-];
 
 const NewsPage = () => {
     const [books, setBooks] = useState<Book[]>([]);
@@ -20,26 +14,22 @@ const NewsPage = () => {
             setIsLoading(true);
             setError(null);
             try {
-                const randomGenre = genres[Math.floor(Math.random() * genres.length)];
-                const response = await fetch(`https://openlibrary.org/subjects/${randomGenre}.json?limit=10`);
+                const response = await fetch(`http://localhost:3000/books/latest?limit=10`);
+                if (!response.ok) throw new Error('No se pudieron cargar las novedades.');
+    
+                const booksData: DbBook[] = await response.json();
 
-                if (!response.ok) {
-                    throw new Error('No se pudieron cargar las novedades.');
-                }
-
-                const data = await response.json();
-
-                if (data.works && data.works.length > 0) {
-                    const formattedBooks: Book[] = data.works.map((work: SubjectApiWork) => ({
-                        key: work.key,
-                        title: work.title,
-                        author_name: work.authors?.map(a => a.name),
-                        cover_i: work.cover_id,
-                    }));
-                    setBooks(formattedBooks);
-                }
+                const formattedBooks: Book[] = booksData.map(bookData => ({
+                    key: bookData.id.toString(),
+                    title: bookData.name,
+                    author_name: [bookData.author],
+                    cover_i:  bookData.book_cover,
+                    first_publish_year: bookData.publishing_year
+                }));
+                setBooks(formattedBooks);
+    
             } catch (err) {
-                setError("Ocurrió un problema al obtener los libros. Intenta de nuevo más tarde.");
+                setError("Ocurrió un problema al obtener los libros.");
                 console.error(err);
             } finally {
                 setIsLoading(false);

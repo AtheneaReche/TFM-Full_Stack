@@ -14,7 +14,7 @@ export interface NavLinkInfo {
     key: string;
     title: string;
     author_name?: string[];
-    cover_i?: number;
+    cover_i?: string;
     first_publish_year?: number;
   }
 
@@ -23,6 +23,16 @@ export interface NavLinkInfo {
   export interface ReadingBook {
     key: string;
     progress: number;
+  }
+
+  export interface DbBook {
+    id: number;
+    name: string;
+    author: string;
+    book_cover: string;
+    publishing_year: number;
+    description: string;
+    publisher: string;
   }
 
   export interface SubjectApiAuthor {

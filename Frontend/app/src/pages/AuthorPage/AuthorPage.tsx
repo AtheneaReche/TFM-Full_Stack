@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import type { AuthorDetails, Book, SubjectApiWork } from '../../types';
+import type { AuthorDetails, Book, DbBook } from '../../types';
 import styles from './AuthorPage.module.css';
 
 import AuthorInfo from '../../components/AuthorInfo/AuthorInfo';
@@ -41,8 +41,8 @@ const AuthorPage = () => {
             setError(null);
             try {
                 const [authorRes, worksRes] = await Promise.all([
-                    fetch(`https://openlibrary.org/authors/${authorConfig.id}.json`),
-                    fetch(`https://openlibrary.org/authors/${authorConfig.id}/works.json?limit=12`)
+                    fetch(`http://localhost:3000/authors/${authorKey}`),
+                    fetch(`http://localhost:3000/authors/${authorKey}/books?limit=12`)
                 ]);
 
                 if (!authorRes.ok || !worksRes.ok) {
@@ -50,12 +50,14 @@ const AuthorPage = () => {
                 }
                 
                 const authorDetails: AuthorDetails = await authorRes.json();
-                const worksData = await worksRes.json();
+                const worksData: DbBook[] = await worksRes.json();
 
-                const formattedBooks: Book[] = worksData.entries.map((work: SubjectApiWork) => ({
-                    key: work.key,
-                    title: work.title,
-                    cover_i: work.cover_id,
+                const formattedBooks: Book[] = worksData.map(bookData => ({
+                    key: bookData.id.toString(),
+                    title: bookData.name,
+                    author_name: [bookData.author],
+                    cover_i:  bookData.book_cover,
+                    first_publish_year: bookData.publishing_year
                 }));
 
                 setAuthor(authorDetails);

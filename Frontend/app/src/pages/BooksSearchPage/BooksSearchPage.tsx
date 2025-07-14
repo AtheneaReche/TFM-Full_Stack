@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { Book } from '../../types';
+import type { Book, DbBook } from '../../types';
 import styles from './BooksSearchPage.module.css';
 import BookList from '../../components/BookList/BookList';
 
@@ -14,11 +14,22 @@ const BooksSearchPage = () => {
     useEffect(() => {
         const fetchSuggestion = async () => {
             try {
-                const response = await fetch(`https://openlibrary.org/search.json?q=the+lord+of+the+rings&limit=1`);
-                const data = await response.json();
-                setSuggestion(data.docs[0]);
+                const response = await fetch(`http://localhost:3000/books/random`);
+                const booksData = await response.json();
+    
+                if (booksData && booksData.length > 0) {
+                    const bookData = booksData[0];
+                    const formattedSuggestion: Book = {
+                        key: bookData.id.toString(),
+                        title: bookData.name,
+                        author_name: [bookData.author],
+                        cover_i:  bookData.book_cover,
+                        first_publish_year: bookData.publishing_year
+                    };
+                    setSuggestion(formattedSuggestion);
+                }
             } catch (error) {
-                console.error("Failed to fetch suggestion", error);
+                console.error("Failed to fetch suggestion from your API", error);
             } finally {
                 setIsLoading(false);
             }
@@ -31,17 +42,28 @@ const BooksSearchPage = () => {
         setHasSearched(true);
         setIsLoading(true);
         setSearchResults([]);
-
-        let url = "https://openlibrary.org/search.json?";
-        if (titleQuery) url += `title=${encodeURIComponent(titleQuery)}`;
-        if (authorQuery) url += `${titleQuery ? '&' : ''}author=${encodeURIComponent(authorQuery)}`;
-
+    
         try {
-            const response = await fetch(`${url}&limit=20`);
-            const data = await response.json();
-            setSearchResults(data.docs);
+            const queryParams = new URLSearchParams();
+            if (titleQuery) queryParams.append('title', titleQuery);
+            if (authorQuery) queryParams.append('author', authorQuery);
+    
+            const response = await fetch(`http://localhost:3000/books/search?${queryParams.toString()}`);
+                if (!response.ok) throw new Error('Search request failed');
+            const booksData: DbBook[] = await response.json();
+    
+            const formattedBooks: Book[] = booksData.map((bookData: DbBook) => ({
+                key: bookData.id.toString(),
+                title: bookData.name,
+                author_name: [bookData.author],
+                cover_i:  bookData.book_cover,
+                first_publish_year: bookData.publishing_year
+            }));
+            
+            setSearchResults(formattedBooks);
+    
         } catch (error) {
-            console.error("Search failed", error);
+            console.error("Search failed:", error);
         } finally {
             setIsLoading(false);
         }

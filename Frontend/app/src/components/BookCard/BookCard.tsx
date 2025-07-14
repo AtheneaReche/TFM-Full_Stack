@@ -125,7 +125,7 @@ const BookCard = ({ book }: BookCardProps) => {
         localStorage.setItem('userBookLists', JSON.stringify(userBookLists));
     };
 
-    const coverUrl = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : noCoverImage;
+    const coverUrl = book.cover_i ? book.cover_i : noCoverImage;
     const urlParams = new URLSearchParams({
         title: book.title,
         author: book.author_name?.join(', ') || 'Desconocido',
