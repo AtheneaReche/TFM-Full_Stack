@@ -1,0 +1,28 @@
+.bookListContainer {
+  padding: 1.25rem 0 3.125rem 0;
+}
+
+.title {
+  font-size: 2.25rem;
+  margin-bottom: 1.875rem;
+  text-align: center;
+}
+
+.bookList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.gridLayout {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  padding: 1.25rem;
+}
+
+.emptyMessage {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--c-Brown);
+  padding: 2rem;
+}

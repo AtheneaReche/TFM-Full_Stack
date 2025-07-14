@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Book } from '../../types';
 import styles from './BooksSearchPage.module.css';
-import Loader from '../../components/Loader/Loader';
-import SearchResultCard from '../../components/SearchResultCard/SearchResultCard';
+import BookList from '../../components/BookList/BookList';
 
 const BooksSearchPage = () => {
     const [titleQuery, setTitleQuery] = useState('');
@@ -36,7 +35,7 @@ const BooksSearchPage = () => {
         let url = "https://openlibrary.org/search.json?";
         if (titleQuery) url += `title=${encodeURIComponent(titleQuery)}`;
         if (authorQuery) url += `${titleQuery ? '&' : ''}author=${encodeURIComponent(authorQuery)}`;
-        
+
         try {
             const response = await fetch(`${url}&limit=20`);
             const data = await response.json();
@@ -48,28 +47,6 @@ const BooksSearchPage = () => {
         }
     };
 
-    const renderResults = () => {
-        if (isLoading) return <Loader />;
-
-        if (!hasSearched) {
-            return suggestion ? (
-                <section className={styles.tipsSection}>
-                    <h2 className={`c_Orange ${styles.tipTitle}`}>Nuestra sugerencia</h2>
-                    <SearchResultCard book={suggestion} />
-                </section>
-            ) : null;
-        }
-
-        if (searchResults.length > 0) {
-            return (
-                <section className={styles.resultsSection}>
-                    {searchResults.map(book => <SearchResultCard key={book.key} book={book} />)}
-                </section>
-            );
-        }
-
-        return <p className={styles.message}>No se encontraron libros para tu búsqueda.</p>;
-    };
 
     return (
         <div>
@@ -95,7 +72,20 @@ const BooksSearchPage = () => {
                     <button className="search_button" onClick={handleSearch}>Buscar</button>
                 </div>
             </section>
-            {renderResults()}
+            {!hasSearched && suggestion ? (
+                <BookList 
+                    books={[suggestion]} 
+                    isLoading={isLoading}
+                    title="Nuestra sugerencia"
+                    titleClassName="c_Orange"
+                />
+            ) : (
+                <BookList 
+                    books={searchResults} 
+                    isLoading={isLoading}
+                    emptyMessage="No se encontraron libros para tu búsqueda."
+                />
+            )}
         </div>
     );
 };

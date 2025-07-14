@@ -20,6 +20,11 @@ export interface NavLinkInfo {
 
   export type BookStatus = 'wantToRead' | 'reading' | 'read';
 
+  export interface ReadingBook {
+    key: string;
+    progress: number;
+  }
+
   export interface SubjectApiAuthor {
     key: string;
     name: string;

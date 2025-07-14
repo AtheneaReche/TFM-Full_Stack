@@ -4,7 +4,7 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    height: 28rem;
+    height: 33rem;
     background-color: transparent;
     text-decoration: none;
     color: var(--c-Brown);
@@ -95,4 +95,20 @@
 }
 .dropdownToggle:hover, .dropdownToggle:focus {
     background-color: var(--c-Brown) !important;
+}
+.progressContainer {
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+}
+
+.progressBar {
+    height: 1.5rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background-color: #e9ecef !important;
+}
+
+.progressBar .progress-bar {
+    background-color: var(--c-Yellow) !important;
+    color: var(--c-Brown) !important;
 }

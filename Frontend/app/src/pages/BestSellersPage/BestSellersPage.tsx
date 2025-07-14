@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Book } from '../../types';
 import styles from './BestSellersPage.module.css';
-import BookCard from '../../components/BookCard/BookCard';
-import Loader from '../../components/Loader/Loader';
+import BookList from '../../components/BookList/BookList';
 
 const bestSellerTitles = [
     "Cien años de soledad", "Don Quijote de la Mancha", "Orgullo y prejuicio",
@@ -38,15 +37,12 @@ const BestSellersPage = () => {
     return (
         <div>
             <h1 className={`${styles.title} c_Brown`}>Best Sellers</h1>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <div className={styles.booksGrid}>
-                    {books.map((book) => (
-                        <BookCard key={book.key} book={book} />
-                    ))}
-                </div>
-            )}
+            <BookList 
+                books={books} 
+                isLoading={isLoading}
+                cardType="grid"
+                emptyMessage="No se encontraron libros best sellers."
+            />
         </div>
     );
 };
