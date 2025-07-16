@@ -1,15 +1,70 @@
 import { Router } from 'express';
-import { 
-    getBooks, 
-    getBooksById, 
-    createBooks, 
-    deleteBooks, 
-    updateBooks
-    } 
-from '../controllers/booksController';
+import {
+    getBooks,
+    getBooksById,
+    createBooks,
+    deleteBooks,
+    updateBooks, searchBooks
+}
+    from '../controllers/booksController';
 import { authenticateToken, authorizeRole } from '../middlewares/authMiddleware';
 
 const router = Router();
+/**
+ * @swagger
+ * /books/search:
+ *   get:
+ *     summary: Search for books by title and/or author
+ *     description: Retrieves a list of books that match a partial title and/or author name.
+ *     tags:
+ *       - Books
+ *     parameters:
+ *       - in: query
+ *         name: title
+ *         description: Search books by a partial title
+ *         required: false
+ *         schema:
+ *           type: string
+ *         example: "Gatsby"
+ *       - in: query
+ *         name: author
+ *         description: Search books by a partial author name
+ *         required: false
+ *         schema:
+ *           type: string
+ *         example: "Fitzgerald"
+ *     responses:
+ *       200:
+ *         description: List of found books
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       description: The book's unique identifier
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       description: The name of the book
+ *                       example: "The Great Gatsby"
+ *                     author:
+ *                       type: string
+ *                       description: The name of the author
+ *                       example: "F. Scott Fitzgerald"
+ *                     genre:
+ *                       type: string
+ *                       description: The genre of the book
+ *                       example: "Fiction"
+ *       400:
+ *         description: Bad Request - No search parameters provided
+ *       500:
+ *         description: Error searching for books
+ */
+router.get('/search/', searchBooks);
 
 /**
  * @swagger

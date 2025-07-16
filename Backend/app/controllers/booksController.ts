@@ -163,3 +163,51 @@ export const updateBooks = async (req: Request, res: Response): Promise<void> =>
         res.status(500).json({ message: 'Error updating book' });
     }
 };
+
+export const searchBooks = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { title, author } = req.query;
+
+        if (!title && !author) {
+            res.status(400).json({ message: 'Se requiere al menos un parámetro de búsqueda (title o author).' });
+            return;
+        }
+
+        let sql = `
+            SELECT 
+                books.id,
+                books.name,
+                books.book_cover,
+                authors.name AS author,
+                books.genre,
+                books.publishing_year,
+                publishers.name AS publisher,
+                books.ISBN,
+                books.description
+            FROM books
+            JOIN authors ON books.author = authors.id
+            LEFT JOIN publishers ON books.publisher = publishers.id
+        `;
+        const conditions: string[] = [];
+        const values: string[] = [];
+
+        if (title) {
+            conditions.push(`books.name LIKE ?`);
+            values.push(`%${title}%`);
+        }
+        if (author) {
+            conditions.push(`authors.name LIKE ?`);
+            values.push(`%${author}%`);
+        }
+        if (conditions.length > 0) {
+            sql += ` WHERE ` + conditions.join(' AND ');
+        }
+
+        const [rows] = await db.execute(sql, values);
+        res.status(200).json(rows);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error searching for books' });
+    }
+};
