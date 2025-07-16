@@ -4,7 +4,7 @@ import {
     getBooksById,
     createBooks,
     deleteBooks,
-    updateBooks, searchBooks
+    updateBooks, searchBooks, getRandomBook
 }
     from '../controllers/booksController';
 import { authenticateToken, authorizeRole } from '../middlewares/authMiddleware';
@@ -65,6 +65,49 @@ const router = Router();
  *         description: Error searching for books
  */
 router.get('/search/', searchBooks);
+
+/**
+ * @swagger
+ * /books/random:
+ *   get:
+ *     summary: Get a single random book
+ *     description: Retrieves one random book from the database.
+ *     tags:
+ *       - Books
+ *     responses:
+ *       200:
+ *         description: A single book
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   description: The book's unique identifier
+ *                   example: 1
+ *                 name:
+ *                   type: string
+ *                   description: The name of the book
+ *                   example: "The Great Gatsby"
+ *                 genre:
+ *                   type: string
+ *                   description: The genre of the book
+ *                   example: "Fiction"
+ *                 publisher:
+ *                   type: string
+ *                   description: The publisher of the book
+ *                   example: "Scribner"
+ *                 ISBN:
+ *                   type: string
+ *                   description: The ISBN of the book
+ *                   example: "978-0743273565"
+ *       404:
+ *         description: Not Found - No books in the database
+ *       500:
+ *         description: Error fetching random book
+ */
+router.get('/random/', getRandomBook);
 
 /**
  * @swagger

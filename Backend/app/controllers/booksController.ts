@@ -211,3 +211,36 @@ export const searchBooks = async (req: Request, res: Response): Promise<void> =>
         res.status(500).json({ message: 'Error searching for books' });
     }
 };
+
+export const getRandomBook = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const sql = `
+            SELECT 
+                books.id,
+                books.name,
+                books.book_cover,
+                authors.name AS author,
+                books.genre,
+                books.publishing_year,
+                publishers.name AS publisher,
+                books.ISBN,
+                books.description
+            FROM books
+            JOIN authors ON books.author = authors.id
+            LEFT JOIN publishers ON books.publisher = publishers.id
+            ORDER BY RAND() 
+            LIMIT 1;
+        `;
+
+        const [rows] = await db.execute(sql);
+
+        if (Array.isArray(rows) && rows.length > 0) {
+            res.status(200).json(rows[0]);
+        } else {
+            res.status(404).json({ message: 'No books found in the database.' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error fetching random book' });
+    }
+};
