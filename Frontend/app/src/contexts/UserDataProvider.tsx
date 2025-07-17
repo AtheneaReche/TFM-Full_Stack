@@ -122,18 +122,21 @@ export const UserDataProvider = ({children}: { children: ReactNode }) => {
 
   const updateBookRating = async (bookId: number, rating: number): Promise<void> => {
     const optimisticBooks = userBooks.map(b =>
-      b.id === bookId ? {...b, rating} : b
+      b.id === bookId ? { ...b, rating } : b
     );
     setUserBooks(optimisticBooks);
+
     try {
       await apiService.rateBook(bookId, rating);
       toast.success(`Rated with ${rating} stars!`);
+      await fetchData();
     } catch (error) {
       console.error("Failed to update rating:", error);
       setUserBooks(userBooks);
       toast.error("Could not save rating.");
     }
   };
+
 
   const value: UserDataContextType = {
     favoriteBooks,

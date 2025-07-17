@@ -80,10 +80,10 @@ const BookCard = ({book}: BookCardProps) => {
                     {status && status !== 'none' ? 'Change Status' : 'Add to...'}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item eventKey="wantToRead">Want to Read</Dropdown.Item>
+                    <Dropdown.Item eventKey="pending">Want to Read</Dropdown.Item>
                     <Dropdown.Item eventKey="reading">Reading</Dropdown.Item>
-                    <Dropdown.Item eventKey="read">Read</Dropdown.Item>
-                    <Dropdown.Divider/>
+                    <Dropdown.Item eventKey="finished">Read</Dropdown.Item>
+                    <Dropdown.Divider />
                     <Dropdown.Item eventKey="remove">Remove from lists</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
