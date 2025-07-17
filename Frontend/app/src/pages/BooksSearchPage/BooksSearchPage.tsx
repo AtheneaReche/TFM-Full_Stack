@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Book, DbBook } from '../../types';
 import styles from './BooksSearchPage.module.css';
 import BookList from '../../components/BookList/BookList';
+import Loader from '../../components/Loader/Loader';
 
 const BooksSearchPage = () => {
     const [titleQuery, setTitleQuery] = useState('');
@@ -15,10 +16,11 @@ const BooksSearchPage = () => {
         const fetchSuggestion = async () => {
             try {
                 const response = await fetch(`http://localhost:3000/books/random`);
-                const booksData = await response.json();
+                if (!response.ok) throw new Error('Suggestion fetch failed');
+                
+                const bookData : DbBook = await response.json();
     
-                if (booksData && booksData.length > 0) {
-                    const bookData = booksData[0];
+                if (bookData) {
                     const formattedSuggestion: Book = {
                         key: bookData.id.toString(),
                         title: bookData.name,
@@ -70,6 +72,31 @@ const BooksSearchPage = () => {
     };
 
 
+    const renderContent = ()=> {
+        if (!hasSearched){
+            if (isLoading){
+                return <Loader />
+            }
+            if (suggestion){
+                return(
+                    <BookList 
+                        books={[suggestion]} 
+                        isLoading={isLoading}
+                        title="Nuestra sugerencia"
+                        titleClassName="c_Orange"
+                    />
+                )
+            }
+            return <p className={styles.message}>No se pudo cargar una sugerencia.</p>;
+        }
+        return (
+            <BookList 
+                books={searchResults} 
+                isLoading={isLoading}
+                emptyMessage="No se encontraron libros para tu búsqueda."
+            />
+        )
+    }
     return (
         <div>
             <section className={styles.searchSection}>
@@ -94,20 +121,7 @@ const BooksSearchPage = () => {
                     <button className="search_button" onClick={handleSearch}>Buscar</button>
                 </div>
             </section>
-            {!hasSearched && suggestion ? (
-                <BookList 
-                    books={[suggestion]} 
-                    isLoading={isLoading}
-                    title="Nuestra sugerencia"
-                    titleClassName="c_Orange"
-                />
-            ) : (
-                <BookList 
-                    books={searchResults} 
-                    isLoading={isLoading}
-                    emptyMessage="No se encontraron libros para tu búsqueda."
-                />
-            )}
+            {renderContent()}
         </div>
     );
 };
