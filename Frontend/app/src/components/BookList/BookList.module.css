@@ -1,10 +1,23 @@
 .bookListContainer {
   padding: 1.25rem 0 3.125rem 0;
 }
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 1.25rem;
+}
+
+.listContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 1.25rem;
+}
 
 .title {
   font-size: 2.25rem;
-  margin-bottom: 1.875rem;
+  margin: 2rem 0;
   text-align: center;
 }
 
@@ -13,11 +26,6 @@
   grid-template-columns: 1fr;
   gap: 1.5rem;
   padding-bottom: 2.5rem;
-}
-
-.gridLayout {
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  padding: 1.25rem;
 }
 
 .emptyMessage {

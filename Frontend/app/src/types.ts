@@ -1,3 +1,5 @@
+export type BookStatus = 'wantToRead' | 'reading' | 'read';
+
 export interface NavLinkInfo {
     text: string;
     to: string; 
@@ -18,7 +20,15 @@ export interface NavLinkInfo {
     first_publish_year?: number;
   }
 
-  export type BookStatus = 'wantToRead' | 'reading' | 'read';
+  export interface BookListProps {
+    books: DbBook[];
+    isLoading?: boolean;
+    emptyMessage?: string;
+    title?: string;
+    titleClassName?: string;
+    cardType?: 'search' | 'grid';
+    className?: string;
+  }
 
   export interface ReadingBook {
     key: string;
@@ -28,12 +38,33 @@ export interface NavLinkInfo {
   export interface DbBook {
     id: number;
     name: string;
+    book_cover: string | null;
     author: string;
-    book_cover: string;
+    genre: string;
     publishing_year: number;
-    description: string;
     publisher: string;
+    ISBN: string;
+    description: string;
   }
+
+  export interface ReadingListItem {
+    id: number;
+    name: string;
+    reading_progress: number;
+    reading_status: string;
+  }
+
+  export interface Collection {
+    id: number;
+    name: string;
+    user: number;
+  }
+
+export interface UserBook extends DbBook {
+  reading_progress: number;
+  reading_status: string;
+  rating: number | null;
+}
 
   export interface SubjectApiAuthor {
     key: string;

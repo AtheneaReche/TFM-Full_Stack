@@ -3,7 +3,7 @@ import { authenticateToken } from '../middlewares/authMiddleware';
 import {
   startReading,
   updateProgress,
-  getUserBooks
+  getUserBooks, rateBook
 } from '../controllers/readingController';
 
 const router = Router();
@@ -104,5 +104,7 @@ router.post('/start', authenticateToken, startReading);
  *         description: Internal server error.
  */
 router.put('/update', authenticateToken, updateProgress);
+
+router.put('/rate', authenticateToken, rateBook);
 
 export default router;

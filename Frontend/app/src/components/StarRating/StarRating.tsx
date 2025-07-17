@@ -1,40 +1,16 @@
-import { useState, useEffect } from 'react';
-import { FaStar } from 'react-icons/fa';
+import {useState} from 'react';
+import {FaStar} from 'react-icons/fa';
 import styles from './StarRating.module.css';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import {useUserData} from '../../hooks/useUserData';
 
 interface StarRatingProps {
-  bookKey: string;
+  bookId: number;
+  currentRating: number;
 }
 
-const StarRating = ({ bookKey }: StarRatingProps) => {
-  const navigate = useNavigate();
-  const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(0);
-  const isLoggedIn = !!localStorage.getItem('token');
-
-  useEffect(() => {
-    if (!isLoggedIn) return;
-    const ratings = JSON.parse(localStorage.getItem('userRatings') || '{}');
-    if (ratings[bookKey]) {
-      setRating(ratings[bookKey]);
-    }
-  }, [bookKey, isLoggedIn]);
-
-  const handleRating = (newRating: number) => {
-    if (!isLoggedIn) {
-      toast.error('Debes iniciar sesión para valorar libros.');
-      navigate('/login');
-      return;
-    }
-    
-    const ratings = JSON.parse(localStorage.getItem('userRatings') || '{}');
-    ratings[bookKey] = newRating;
-    localStorage.setItem('userRatings', JSON.stringify(ratings));
-    setRating(newRating);
-    toast.success(`Has valorado este libro con ${newRating} estrellas.`);
-  };
+const StarRating = ({bookId, currentRating}: StarRatingProps) => {
+  const [hover, setHover] = useState<number>(0);
+  const {updateBookRating} = useUserData();
 
   return (
     <div className={styles.starContainer}>
@@ -44,10 +20,10 @@ const StarRating = ({ bookKey }: StarRatingProps) => {
           <FaStar
             key={starValue}
             className={styles.star}
-            color={starValue <= (hover || rating) ? '#F2C379' : '#e4e5e9'}
+            color={starValue <= (hover || currentRating) ? '#F2C379' : '#e4e5e9'}
             size={24}
-            onClick={() => handleRating(starValue)}
-            onMouseEnter={() => isLoggedIn && setHover(starValue)}
+            onClick={() => updateBookRating(bookId, starValue)}
+            onMouseEnter={() => setHover(starValue)}
             onMouseLeave={() => setHover(0)}
           />
         );
