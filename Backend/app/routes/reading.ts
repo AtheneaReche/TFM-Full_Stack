@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { authenticateToken } from '../middlewares/authMiddleware';
+import {Router} from 'express';
+import {authenticateToken} from '../middlewares/authMiddleware';
 import {
   startReading,
   updateProgress,
@@ -105,6 +105,40 @@ router.post('/start', authenticateToken, startReading);
  */
 router.put('/update', authenticateToken, updateProgress);
 
+/**
+ * @swagger
+ * /reading/rate:
+ *   put:
+ *     summary: Rate a book
+ *     description: Set or update a user's rating for a specific book.
+ *     tags:
+ *       - Books
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - bookId
+ *               - rating
+ *             properties:
+ *               bookId:
+ *                 type: integer
+ *                 description: The ID of the book to rate.
+ *                 example: 42
+ *               rating:
+ *                 type: integer
+ *                 description: The rating from 1 to 5.
+ *                 example: 5
+ *     responses:
+ *       200:
+ *         description: The rating for the book has been updated successfully.
+ *       500:
+ *         description: Internal server error.
+ */
 router.put('/rate', authenticateToken, rateBook);
 
 export default router;

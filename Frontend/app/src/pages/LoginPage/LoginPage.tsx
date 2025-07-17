@@ -19,7 +19,7 @@ const LoginPage = () => {
     setError(null);
 
     try {
-      const url = 'http://localhost:3000/auth/login';
+      const url = '/api/auth/login';
       const response = await axios.post<LoginResponse>(url, { email, password });
 
       localStorage.setItem('token', response.data.token);

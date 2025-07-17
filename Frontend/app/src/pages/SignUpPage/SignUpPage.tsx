@@ -18,7 +18,7 @@ const SignUpPage = () => {
     setError(null);
 
     try {
-      const url = 'http://localhost:3000/auth/register';
+      const url = '/api/auth/register';
       await axios.post(url, { name, email, password });
       
       console.log('User successfully registed.');

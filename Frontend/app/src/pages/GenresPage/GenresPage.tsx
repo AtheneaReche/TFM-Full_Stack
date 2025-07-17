@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import type { Book, DbBook } from '../../types';
+import {useState} from 'react';
+import type {DbBook} from '../../types';
 import styles from './GenresPage.module.css';
 import BookCard from '../../components/BookCard/BookCard';
 import Loader from '../../components/Loader/Loader';
 
-// Genres Images
 import romanceImg from '../../assets/images/romance.png';
 import historyImg from '../../assets/images/history.png';
 import adventuresImg from '../../assets/images/adventures.png';
@@ -19,90 +18,80 @@ import thrillerImg from '../../assets/images/thriller.png';
 import youngAdultImg from '../../assets/images/young-adult.png';
 
 const categories = [
-    { name: "Romance", img: romanceImg, genreKey: "romance", longName: false },
-    { name: "Histórico", img: historyImg, genreKey: "history", longName: false },
-    { name: "Aventuras", img: adventuresImg, genreKey: "adventures", longName: false },
-    { name: "Biografías", img: biographyImg, genreKey: "biography", longName: false },
-    { name: "Contemporáneo", img: contemporaryImg, genreKey: "contemporary", longName: true },
-    { name: "Cocina", img: cookingImg, genreKey: "cooking", longName: false },
-    { name: "Terror", img: horrorImg, genreKey: "horror", longName: false },
-    { name: "Niños", img: kidsImg, genreKey: "kids", longName: false },
-    { name: "Poesía", img: poetryImg, genreKey: "poetry", longName: false },
-    { name: "SCFI", img: SCFIImg, genreKey: "SCFI", longName: false },
-    { name: "Thriller", img: thrillerImg, genreKey: "thriller", longName: false },
-    { name: "Joven Adulto", img: youngAdultImg, genreKey: "youngAdult", longName: false },
+  {name: "Romance", img: romanceImg, genreKey: "romance", longName: false},
+  {name: "Histórico", img: historyImg, genreKey: "history", longName: false},
+  {name: "Aventuras", img: adventuresImg, genreKey: "adventures", longName: false},
+  {name: "Biografías", img: biographyImg, genreKey: "biography", longName: false},
+  {name: "Contemporáneo", img: contemporaryImg, genreKey: "contemporary", longName: true},
+  {name: "Cocina", img: cookingImg, genreKey: "cooking", longName: false},
+  {name: "Terror", img: horrorImg, genreKey: "horror", longName: false},
+  {name: "Niños", img: kidsImg, genreKey: "kids", longName: false},
+  {name: "Poesía", img: poetryImg, genreKey: "poetry", longName: false},
+  {name: "SCFI", img: SCFIImg, genreKey: "SCFI", longName: false},
+  {name: "Thriller", img: thrillerImg, genreKey: "thriller", longName: false},
+  {name: "Joven Adulto", img: youngAdultImg, genreKey: "youngAdult", longName: false},
 ];
 
 const GenresPage = () => {
-    const [books, setBooks] = useState<Book[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const [books, setBooks] = useState<DbBook[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
 
-    const handleGenreClick = async (genreKey: string, genreName: string) => {
-        setIsLoading(true);
-        setError(null);
-        setBooks([]);
-        setSelectedGenre(genreName);
+  const handleGenreClick = async (genreKey: string, genreName: string) => {
+    setIsLoading(true);
+    setError(null);
+    setBooks([]);
+    setSelectedGenre(genreName);
 
-        try {
-            const response = await fetch(`http://localhost:3000/books?genre=${genreKey}&limit=12`);
-            if (!response.ok) throw new Error('No se encontraron libros para este género.');
+    try {
+      const response = await fetch(`/api/books?genre=${genreKey}&limit=12`);
+      if (!response.ok) throw new Error('No se encontraron libros para este género.');
 
-            const booksData: DbBook[] = await response.json();
+      const booksData: DbBook[] = await response.json();
+      setBooks(booksData);
+    } catch (err) {
+      setError("No se pudieron cargar los libros. Por favor, inténtalo de nuevo más tarde.");
+      console.error(err);
+      setBooks([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-            const formattedBooks: Book[] = booksData.map(bookData => ({
-                key: bookData.id.toString(),
-                title: bookData.name,
-                author_name: [bookData.author],
-                cover_i: bookData.book_cover,
-                first_publish_year: bookData.publishing_year
-            }));
-            setBooks(formattedBooks);
-        } catch (err) {
-            setError("No se pudieron cargar los libros. Por favor, inténtalo de nuevo más tarde.");
-            console.error(err);
-            setBooks([]);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return (
-        <div>
-            <h2 className={`subtitle c_Brown ${styles.pageTitle}`}>Búsqueda por Géneros</h2>
-
-            <div className={styles.genresContainer}>
-                {categories.map((cat) => (
-                    <div
-                        key={cat.genreKey}
-                        className={styles.genreCircle}
-                        onClick={() => handleGenreClick(cat.genreKey, cat.name)}
-                    >
-                        <img src={cat.img} alt={cat.name} className={styles.genreIcon} />
-                        <div className={`${styles.genreName} ${cat.longName ? styles.genreNameLong : ''}`}>
-                            {cat.name}
-                        </div>
-                    </div>
-                ))}
+  return (
+    <div>
+      <h2 className={`subtitle c_Brown ${styles.pageTitle}`}>Búsqueda por Géneros</h2>
+      <div className={styles.genresContainer}>
+        {categories.map((cat) => (
+          <div
+            key={cat.genreKey}
+            className={styles.genreCircle}
+            onClick={() => handleGenreClick(cat.genreKey, cat.name)}
+          >
+            <img src={cat.img} alt={cat.name} className={styles.genreIcon}/>
+            <div className={`${styles.genreName} ${cat.longName ? styles.genreNameLong : ''}`}>
+              {cat.name}
             </div>
-
-            <div className={styles.resultsContainer}>
-                {isLoading && <Loader />}
-                {error && <p className={styles.message}>{error}</p>}
-                {!isLoading && !error && selectedGenre && books.length === 0 && (
-                     <p className={styles.message}>No se encontraron libros para el género "{selectedGenre}".</p>
-                )}
-                {!isLoading && books.length > 0 && (
-                    <div className={styles.booksGrid}>
-                        {books.map((book) => (
-                            <BookCard key={book.key} book={book} />
-                        ))}
-                    </div>
-                )}
-            </div>
-        </div>
-    );
+          </div>
+        ))}
+      </div>
+      <div className={styles.resultsContainer}>
+        {isLoading && <Loader/>}
+        {error && <p className={styles.message}>{error}</p>}
+        {!isLoading && !error && selectedGenre && books.length === 0 && (
+          <p className={styles.message}>No se encontraron libros para el género "{selectedGenre}".</p>
+        )}
+        {!isLoading && books.length > 0 && (
+          <div className={styles.booksGrid}>
+            {books.map((book) => (
+              <BookCard key={book.id} book={book}/>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default GenresPage;
