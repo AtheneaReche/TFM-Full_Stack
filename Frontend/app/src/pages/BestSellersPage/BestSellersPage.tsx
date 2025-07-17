@@ -9,20 +9,35 @@ const BestSellersPage = () => {
 
     useEffect(() => {
         const fetchAllBooks = async () => {
+            setIsLoading(true);
             try {
-                const response = await fetch(`http://localhost:3000/books/bestsellers`);
-                if (!response.ok) throw new Error('No se pudieron obtener los best sellers.');
-            
-                const booksData: DbBook[] = await response.json();
+                const bookIds = [49, 50, 51, 52, 53, 54, 55, 56, 57, 58];
 
-                const formattedBooks: Book[] = booksData.map(bookData => ({
-                    key: bookData.id.toString(),
-                    title: bookData.name,
-                    author_name: [bookData.author],
-                    cover_i:  bookData.book_cover,
-                    first_publish_year: bookData.publishing_year
-                }));
+                const bookPromises = bookIds.map(id =>
+                    fetch(`http://localhost:3000/books/${id}`)
+                        .then(res => {
+                            if (!res.ok) {
+                                console.warn(`No se encontró el libro con id: ${id}`);
+                                return null;
+                            }
+                            return res.json();
+                        })
+                );
+
+                const booksData: (DbBook | null)[] = await Promise.all(bookPromises);
+
+                const formattedBooks: Book[] = booksData
+                    .filter((bookData): bookData is DbBook => bookData !== null)
+                    .map(bookData => ({
+                        key: bookData.id.toString(),
+                        title: bookData.name,
+                        author_name: [bookData.author],
+                        cover_i:  bookData.book_cover,
+                        first_publish_year: bookData.publishing_year
+                    }));
+            
                 setBooks(formattedBooks);
+
             } catch (error) {
                 console.error("Error fetching best sellers:", error);
             } finally {
