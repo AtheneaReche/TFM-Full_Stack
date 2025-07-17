@@ -15,9 +15,9 @@ const DashboardPage = () => {
     navigate('/login');
   };
 
-  const readBooks: UserBook[] = userBooks.filter(book => book.reading_status === 'read');
+  const readBooks: UserBook[] = userBooks.filter(book => book.reading_status === 'finished');
   const readingBooks: UserBook[] = userBooks.filter(book => book.reading_status === 'reading');
-  const wantToReadBooks: UserBook[] = userBooks.filter(book => book.reading_status === 'wantToRead');
+  const wantToReadBooks: UserBook[] = userBooks.filter(book => book.reading_status === 'pending');
 
   return (
     <div className={styles.pageContainer}>
