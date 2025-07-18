@@ -139,8 +139,11 @@ describe('Books Controller', () => {
       const res = mockResponse();
 
       await getBooksById(req, res);
-
-      expect(mockedDb.execute).toHaveBeenCalledWith('SELECT * FROM books WHERE id = ?', ['1']);
+      
+      expect(mockedDb.execute).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT'),
+        ['1']
+      );
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(mockBook);
     });

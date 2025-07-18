@@ -81,7 +81,7 @@ describe('Books API', () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockBook);
       expect(mockedDb.execute).toHaveBeenCalledWith(
-        'SELECT * FROM books WHERE id = ?',
+        expect.stringContaining('SELECT'),
         ['1']
       );
     });

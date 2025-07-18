@@ -81,8 +81,8 @@ describe('Reading Controller', () => {
       await updateProgress(req, res);
 
       expect(mockedDb.execute).toHaveBeenCalledWith(
-        expect.stringContaining('UPDATE `users-books`'),
-        [req.body.progress, req.body.status, req.user.id, req.body.bookId]
+        expect.stringContaining('INSERT INTO `users-books`'),
+        [req.user.id, req.body.bookId, req.body.status, req.body.progress]
       );
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({ message: 'Progress updated' });
