@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import type {DbBook} from '../../types';
 import styles from './GenresPage.module.css';
-import BookCard from '../../components/BookCard/BookCard';
 import Loader from '../../components/Loader/Loader';
+import BookList from '../../components/BookList/BookList';
 
 import romanceImg from '../../assets/images/romance.png';
 import historyImg from '../../assets/images/history.png';
@@ -59,6 +59,22 @@ const GenresPage = () => {
     }
   };
 
+  const renderResults = () => {
+    if (isLoading) return <Loader/>;
+    if (error) return <p className={styles.message}>{error}</p>;
+    if (selectedGenre) {
+      return (
+        <BookList
+          books={books}
+          isLoading={isLoading}
+          emptyMessage={`No se encontraron libros para el género "${selectedGenre}".`}
+          className={styles.booksGrid}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <div>
       <h2 className={`subtitle c_Brown ${styles.pageTitle}`}>Búsqueda por Géneros</h2>
@@ -77,18 +93,7 @@ const GenresPage = () => {
         ))}
       </div>
       <div className={styles.resultsContainer}>
-        {isLoading && <Loader/>}
-        {error && <p className={styles.message}>{error}</p>}
-        {!isLoading && !error && selectedGenre && books.length === 0 && (
-          <p className={styles.message}>No se encontraron libros para el género "{selectedGenre}".</p>
-        )}
-        {!isLoading && books.length > 0 && (
-          <div className={styles.booksGrid}>
-            {books.map((book) => (
-              <BookCard key={book.id} book={book}/>
-            ))}
-          </div>
-        )}
+        {renderResults()}
       </div>
     </div>
   );

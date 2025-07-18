@@ -4,8 +4,8 @@ import type {AuthorDetails, DbBook} from '../../types';
 import styles from './AuthorPage.module.css';
 
 import AuthorInfo from '../../components/AuthorInfo/AuthorInfo';
-import BookCard from '../../components/BookCard/BookCard';
 import Loader from '../../components/Loader/Loader';
+import BookList from '../../components/BookList/BookList';
 
 import sandersonImage from '../../assets/images/brandon.png';
 import christieImage from '../../assets/images/agatha.jpg';
@@ -75,11 +75,11 @@ const AuthorPage = () => {
         customImage={authorConfig.image}
         customBio={authorConfig.bio}
       />
-      <div className={styles.booksGrid}>
-        {books.map((book) => (
-          <BookCard key={book.id} book={book}/>
-        ))}
-      </div>
+      <BookList
+        books={books}
+        isLoading={false} // Loading is handled by the page
+        className={styles.booksGrid}
+      />
     </div>
   );
 };

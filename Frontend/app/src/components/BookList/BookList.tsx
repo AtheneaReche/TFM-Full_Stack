@@ -1,9 +1,8 @@
 import React from 'react';
-import type { BookListProps } from '../../types';
 import BookCard from '../BookCard/BookCard';
 import styles from './BookList.module.css';
 import Loader from '../Loader/Loader';
-
+import type {BookListProps} from "../../types";
 
 const BookList: React.FC<BookListProps> = (
   {
@@ -12,14 +11,11 @@ const BookList: React.FC<BookListProps> = (
     emptyMessage = "No books found.",
     title,
     titleClassName,
-    cardType = 'grid',
     className,
   }) => {
   if (isLoading) {
     return <Loader/>;
   }
-
-  const layoutClass = cardType === 'grid' ? styles.gridLayout : styles.searchLayout;
 
   return (
     <div className={`${styles.bookListContainer} ${className || ''}`}>
@@ -28,7 +24,7 @@ const BookList: React.FC<BookListProps> = (
       )}
 
       {books.length > 0 ? (
-        <div className={`${styles.bookList} ${layoutClass}`}>
+        <div className={`${styles.bookList} ${styles.gridLayout}`}>
           {books.map((book) => (
             <BookCard key={book.id} book={book}/>
           ))}

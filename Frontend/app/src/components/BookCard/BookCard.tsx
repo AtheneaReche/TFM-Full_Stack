@@ -77,14 +77,14 @@ const BookCard = ({book}: BookCardProps) => {
               <div onClick={(e: React.MouseEvent) => e.preventDefault()}>
                 <Dropdown onSelect={handleStatusChange}>
                   <Dropdown.Toggle id={`dropdown-status-${book.id}`} className={styles.dropdownToggle}>
-                    {status && status !== 'none' ? 'Change Status' : 'Add to...'}
+                    {status && status !== 'none' ? 'Cambiar estado' : 'Añadir a...'}
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item eventKey="pending">Want to Read</Dropdown.Item>
-                    <Dropdown.Item eventKey="reading">Reading</Dropdown.Item>
-                    <Dropdown.Item eventKey="finished">Read</Dropdown.Item>
+                    <Dropdown.Item eventKey="pending">Quiero leer</Dropdown.Item>
+                    <Dropdown.Item eventKey="reading">Leyendo</Dropdown.Item>
+                    <Dropdown.Item eventKey="finished">Leído</Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item eventKey="remove">Remove from lists</Dropdown.Item>
+                    <Dropdown.Item eventKey="remove">Quitar de las listas</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>

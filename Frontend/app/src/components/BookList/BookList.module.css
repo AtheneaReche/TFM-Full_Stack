@@ -1,19 +1,20 @@
 .bookListContainer {
   padding: 1.25rem 0 3.125rem 0;
 }
+/*
 .gridContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 0.5fr));
   gap: 1.5rem;
   padding: 1.25rem;
-}
-
+}*/
+/*
 .listContainer {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: .5fr;
   gap: 1.5rem;
   padding: 1.25rem;
-}
+}*/
 
 .title {
   font-size: 2.25rem;
@@ -23,7 +24,8 @@
 
 .bookList {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fill, 230px);
+  justify-content: center;
   gap: 1.5rem;
   padding-bottom: 2.5rem;
 }

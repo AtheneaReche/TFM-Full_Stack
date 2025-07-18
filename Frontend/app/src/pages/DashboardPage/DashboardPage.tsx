@@ -21,39 +21,39 @@ const DashboardPage = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <h1 className={`title c_Yellow ${styles.welcomeTitle}`}>My Library</h1>
+      <h1 className={`title c_Yellow ${styles.welcomeTitle}`}>Mi Biblioteca</h1>
 
       {isLoading ? <Loader/> : (
         <Tabs defaultActiveKey="favorites" id="dashboard-tabs" className={`mb-3 ${styles.tabs}`}>
-          <Tab eventKey="favorites" title={`Favorites (${favoriteBooks.length})`}>
+          <Tab eventKey="favorites" title={`Favoritos (${favoriteBooks.length})`}>
             <BookList
               books={favoriteBooks as DbBook[]}
               cardType="grid"
-              emptyMessage="No books in favorites."
+              emptyMessage="No tienes libros favoritos."
               className={styles.booksGrid}
             />
           </Tab>
-          <Tab eventKey="read" title={`Read (${readBooks.length})`}>
+          <Tab eventKey="read" title={`Leídos (${readBooks.length})`}>
             <BookList
               books={readBooks as DbBook[]}
               cardType="grid"
-              emptyMessage="No books in your read list."
+              emptyMessage="No hay libros leídos."
               className={styles.booksGrid}
             />
           </Tab>
-          <Tab eventKey="reading" title={`Reading (${readingBooks.length})`}>
+          <Tab eventKey="reading" title={`Leyendo (${readingBooks.length})`}>
             <BookList
               books={readingBooks as DbBook[]}
               cardType="grid"
-              emptyMessage="No books currently being read."
+              emptyMessage="No hay libros leyendo."
               className={styles.booksGrid}
             />
           </Tab>
-          <Tab eventKey="wantToRead" title={`Want to Read (${wantToReadBooks.length})`}>
+          <Tab eventKey="wantToRead" title={`Quiero leer (${wantToReadBooks.length})`}>
             <BookList
               books={wantToReadBooks as DbBook[]}
               cardType="grid"
-              emptyMessage="No books on your wishlist."
+              emptyMessage="No hay libros que quieras leer."
               className={styles.booksGrid}
             />
           </Tab>
@@ -61,7 +61,7 @@ const DashboardPage = () => {
       )}
 
       <button onClick={handleLogout} className={`general_button ${styles.logoutButton}`}>
-        Log Out
+        Cerrar Sesión
       </button>
     </div>
   );

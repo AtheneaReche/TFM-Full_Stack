@@ -23,12 +23,6 @@ const apiService = {
   getUserFavorites: (): Promise<DbBook[]> => fetch('/api/favorites', {headers: apiService.getAuthHeaders()}).then(handleApiResponse),
   getUserBooks: (): Promise<UserBook[]> => fetch('/api/reading', {headers: apiService.getAuthHeaders()}).then(handleApiResponse),
   getUserCollections: (): Promise<Collection[]> => fetch('/api/collections', {headers: apiService.getAuthHeaders()}).then(handleApiResponse),
-
-  startReadingBook: (bookId: number): Promise<Response> => fetch('/api/reading/start', {
-    method: 'POST',
-    headers: apiService.getAuthHeaders(),
-    body: JSON.stringify({bookId})
-  }),
   updateBookProgress: (bookId: number, progress: number, status: string): Promise<Response> => fetch('/api/reading/update', {
     method: 'PUT',
     headers: apiService.getAuthHeaders(),
@@ -98,45 +92,53 @@ export const UserDataProvider = ({children}: { children: ReactNode }) => {
     try {
       if (isCurrentlyFavorite) {
         await apiService.removeBookFromCollection(favoritesCollectionId, book.id);
+        toast.success("Removed from favorites!");
       } else {
         await apiService.addBookToCollection(favoritesCollectionId, book.id);
+        toast.success("Added to favorites!");
       }
+      await fetchData();
     } catch (error) {
       console.error("Failed to toggle favorite:", error);
       setFavoriteBooks(favoriteBooks);
+      toast.error("Could not update favorites.");
     }
   };
 
   const updateBookStatus = async (bookId: number, status: string, progress: number = 0): Promise<void> => {
+    const originalUserBooks = [...userBooks];
     const optimisticBooks = userBooks.map(b =>
       b.id === bookId ? {...b, reading_status: status, reading_progress: progress} : b
     );
     setUserBooks(optimisticBooks);
     try {
       await apiService.updateBookProgress(bookId, progress, status);
+      toast.success("Book status updated!");
+      // This is the crucial step: refetch all data to ensure consistency.
+      await fetchData();
     } catch (error) {
       console.error("Failed to update book status:", error);
-      setUserBooks(userBooks);
+      setUserBooks(originalUserBooks);
+      toast.error("Could not update book status.");
     }
   };
 
   const updateBookRating = async (bookId: number, rating: number): Promise<void> => {
+    const originalUserBooks = [...userBooks];
     const optimisticBooks = userBooks.map(b =>
-      b.id === bookId ? { ...b, rating } : b
+      b.id === bookId ? {...b, rating} : b
     );
     setUserBooks(optimisticBooks);
-
     try {
       await apiService.rateBook(bookId, rating);
       toast.success(`Rated with ${rating} stars!`);
       await fetchData();
     } catch (error) {
       console.error("Failed to update rating:", error);
-      setUserBooks(userBooks);
+      setUserBooks(originalUserBooks);
       toast.error("Could not save rating.");
     }
   };
-
 
   const value: UserDataContextType = {
     favoriteBooks,
